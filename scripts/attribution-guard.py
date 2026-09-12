@@ -3,9 +3,10 @@
 
 Reads the PreToolUse hook payload on stdin. If the Bash command creates a
 commit message, require an `Assisted-by:` trailer and forbid the AI adding a
-`Signed-off-by:` (DCO is human-only) or the old `Co-Authored-By: Claude` line.
-Blocks by exiting 2 with the reason on stderr, which Claude Code feeds back to
-the model so it can rewrite the commit.
+`Signed-off-by:` (DCO is human-only), the old `Co-Authored-By: Claude` line,
+or a `Claude-Session:` line (not part of kernel policy, and useless in the
+commit). Blocks by exiting 2 with the reason on stderr, which Claude Code
+feeds back to the model so it can rewrite the commit.
 
 Ref: https://docs.kernel.org/process/coding-assistants.html#attribution
 """
@@ -46,6 +47,11 @@ def main() -> int:
         problems.append(
             "AI must NOT add a Signed-off-by line — only the human developer "
             "can certify the DCO"
+        )
+    if re.search(r"Claude-Session:", cmd, re.IGNORECASE):
+        problems.append(
+            "remove the `Claude-Session:` line — it's not part of kernel "
+            "attribution policy and is useless in the commit"
         )
 
     if problems:
