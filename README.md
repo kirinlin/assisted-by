@@ -8,6 +8,7 @@ their help correctly on every commit, following the kernel's
 
 ```
 Assisted-by: Claude:claude-opus-4-8
+Assisted-by: Codex:gpt-6.1-sol/high
 ```
 
 It ships two things:
@@ -27,6 +28,22 @@ It ships two things:
 - 🚫 **No `Co-Authored-By: Claude`** — that older convention is replaced by `Assisted-by:`.
 - 🚫 Don't list basic tools (git, gcc, editors) — only the AI agent and any specialized
   analysis tools (`coccinelle`, `sparse`, `smatch`, …).
+
+For Codex and Claude, record the exact model ID and reasoning effort from the session
+when known as `Assisted-by: AGENT_NAME:<model-id>/<reasoning-effort>`, for example:
+
+```text
+Assisted-by: Codex:gpt-6-astra/medium
+Assisted-by: Codex:gpt-6.1-sol/high
+Assisted-by: Codex:gpt-6.1-sol/low
+Assisted-by: Codex:gpt-6-luna/high
+Assisted-by: Claude:claude-opus-4-8/high
+```
+
+Use the configuration actually used, rather than a generic `Codex:GPT-6` label
+when the exact model is known. Omit the effort suffix if unavailable and never
+guess unknown model details. If multiple agents contribute, add a trailer for each
+distinct agent/model/effort combination used. The hook accepts these formats.
 
 ## Install
 
