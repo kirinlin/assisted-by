@@ -50,7 +50,7 @@ distinct agent/model/effort combination used. The hook accepts these formats.
 ### Claude Code — skill **+** enforcing hook (recommended)
 
 ```bash
-claude plugin marketplace add bcmyguest/assisted-by
+claude plugin marketplace add kirinlin/assisted-by
 claude plugin install assisted-by@assisted-by
 ```
 
@@ -62,7 +62,8 @@ Restart Claude Code to load the hook.
 Register this checkout as a local marketplace:
 
 ```bash
-codex plugin marketplace add .
+codex plugin marketplace add kirinlin/assisted-by
+codex plugin add assisted-by@assisted-by
 ```
 
 Restart the desktop app. Open the Plugins Directory, select **Assisted-by**, and
@@ -84,7 +85,7 @@ The skill is in the portable [skills](https://skills.sh) format, so any agent th
 `SKILL.md` can use the guidance:
 
 ```bash
-npx skills add bcmyguest/assisted-by
+npx skills add kirinlin/assisted-by
 ```
 
 > The portable skill carries the guidance. Native hook enforcement is available
