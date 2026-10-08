@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${PLUGIN_ROOT}/scripts/attribution-guard.py\"",
+            "commandWindows": "uv run --no-project python \"${PLUGIN_ROOT}/scripts/attribution-guard.py\"",
+            "statusMessage": "Checking commit attribution"
+          }
+        ]
+      }
+    ]
+  }
+}

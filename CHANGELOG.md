@@ -1,4 +1,14 @@
 
+## [Unreleased]
+
+### Added
+
+- Codex plugin manifest and PreToolUse hook, with a Windows command that uses uv.
+
+### Changed
+
+- Accept Codex shell payloads and reject AI sign-off and co-author trailers for Codex.
+
 ## 0.1.0
 
 ### Features
@@ -8,4 +18,3 @@
 ### Build & Tooling
 
 - Add git-cliff config and tag-triggered release workflow (28dcce8)
-

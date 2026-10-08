@@ -44,7 +44,7 @@ commit, in any repo on this machine.
   Certificate of Origin and only a human can do that. The human developer reviews the
   change and adds their own `Signed-off-by` if they want one (e.g. `git commit -s`).
 
-- **Never add `Co-Authored-By: Claude`.** That older convention is replaced by
+- **Never add `Co-Authored-By: Claude` or `Co-Authored-By: Codex`.** That older convention is replaced by
   `Assisted-by:` here.
 
 - **Never add a `Claude-Session:` line.** It's not part of the kernel policy and is
@@ -72,10 +72,14 @@ without implying the AI can certify provenance.
 
 ## Enforcement
 
-This plugin ships a PreToolUse hook (`scripts/attribution-guard.py`) that inspects
+The Claude Code and Codex plugins load a PreToolUse hook (`scripts/attribution-guard.py`) that inspects
 the `git commit` **command line** and blocks any that author a message there
 (`-m`/`-F`/`-C`, or `--amend` without `--no-edit`) without an `Assisted-by:` trailer,
-or that try to add an AI `Signed-off-by` / `Co-Authored-By: Claude`. A bare
+or that try to add an AI `Signed-off-by` / `Co-Authored-By: Claude` / `Co-Authored-By: Codex`. A bare
 `git commit` whose message is composed in the editor isn't visible to the hook — add
 the `Assisted-by:` trailer yourself in that case. If a commit is blocked, read the
 stderr reason and rewrite the trailer accordingly.
+
+Codex users must review and trust the hook before it runs. The portable skill
+installation alone does not register a hook. The guard checks command text only;
+it does not read message files or reused commits, or validate the final trailer.
