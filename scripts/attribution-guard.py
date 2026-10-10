@@ -55,7 +55,7 @@ def main() -> int:
 
     for match in re.finditer(r"Assisted-by:\s*Codex:([^/\s]+)", cmd, re.IGNORECASE):
         model_identifier = match.group(1).strip("<> ").casefold()
-        if model_identifier in {"gpt-6", "model-id", "model"}:
+        if model_identifier in {"gpt-6", "gpt-5", "model-id", "model"}:
             problems.append(
                 "Codex attribution must use the model identifier string from the "
                 "session configuration; `GPT-6` is too generic"
