@@ -30,6 +30,8 @@ class AttributionGuardTests(unittest.TestCase):
                     })
                     self.assertEqual(denied.returncode, 2)
                     self.assertIn("AGENT_NAME:<model-id>", denied.stderr)
+                    self.assertIn("AGENT_NAME:<model-id>/<reasoning-effort>", denied.stderr)
+                    self.assertIn("Omit /reasoning-effort if unavailable", denied.stderr)
                     self.assertEqual(denied.stdout, "")
                     allowed = self.run_guard({
                         "tool_name": "Bash",
@@ -37,6 +39,23 @@ class AttributionGuardTests(unittest.TestCase):
                     })
                     self.assertEqual(allowed.returncode, 0)
                     self.assertEqual(allowed.stderr, "")
+
+    def test_skill_attribution_formats_are_allowed(self):
+        for trailer in (
+            "Codex:gpt-6-astra/medium",
+            "Codex:gpt-6.1-sol/high",
+            "Codex:gpt-6.1-sol/low",
+            "Codex:gpt-6-luna/high",
+            "Claude:claude-opus-4-8/high",
+            "Codex:gpt-6.1-sol",
+            "Claude:claude-opus-4-8",
+        ):
+            with self.subTest(trailer=trailer):
+                result = self.run_guard({"tool_input": {
+                    "command": f'git commit -m "fix: update\n\nAssisted-by: {trailer}"',
+                }})
+                self.assertEqual(result.returncode, 0)
+                self.assertEqual(result.stderr, "")
 
     def test_ai_trailers_are_denied(self):
         for trailer in (

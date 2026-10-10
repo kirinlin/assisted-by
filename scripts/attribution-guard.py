@@ -8,6 +8,10 @@ or a `Claude-Session:` line (not part of kernel policy, and useless in the
 commit). Blocks by exiting 2 with the reason on stderr, which the agent
 feeds back to the model so it can rewrite the commit.
 
+For Codex and Claude, use the exact model ID and reasoning effort from the
+session when known. Omit the effort suffix when unavailable. The command-only
+guard cannot determine the session configuration, so it does not require it.
+
 Ref: https://docs.kernel.org/process/coding-assistants.html#attribution
 """
 import json
@@ -43,8 +47,9 @@ def main() -> int:
     problems = []
     if "Assisted-by:" not in cmd:
         problems.append(
-            "missing `Assisted-by: AGENT_NAME:<model-id>` trailer (fill <model-id> "
-            "with the model id you actually are)"
+            "missing `Assisted-by: AGENT_NAME:<model-id>` trailer; for Codex and "
+            "Claude, use `Assisted-by: AGENT_NAME:<model-id>/<reasoning-effort>` "
+            "when the reasoning effort is known"
         )
     if re.search(r"Co-Authored-By:\s*(Claude|Codex)\b", cmd, re.IGNORECASE):
         problems.append(
@@ -66,9 +71,20 @@ def main() -> int:
         sys.stderr.write(
             "Commit blocked by git-attribution guard (kernel attribution policy):\n"
             + "\n".join(f"  - {p}" for p in problems)
-            + "\n\nUse a trailer like:\n  Assisted-by: AGENT_NAME:<model-id>\n"
-            "(fill <model-id> with the model you actually are) and let the human "
-            "add their own Signed-off-by if they want one.\n"
+            + "\n\nFor Codex and Claude, use:\n"
+            "  Assisted-by: AGENT_NAME:<model-id>/<reasoning-effort>\n"
+            "Use the model and effort from the session or contributing agent's "
+            "configuration. These examples are not defaults:\n"
+            "  Assisted-by: Codex:gpt-6-astra/medium\n"
+            "  Assisted-by: Codex:gpt-6.1-sol/high\n"
+            "  Assisted-by: Codex:gpt-6.1-sol/low\n"
+            "  Assisted-by: Codex:gpt-6-luna/high\n"
+            "  Assisted-by: Claude:claude-opus-4-8/high\n"
+            "Omit /reasoning-effort if unavailable. Use the exact model ID when "
+            "known; otherwise use the most specific known model label. Do not "
+            "invent model or effort details. Add one trailer for each distinct "
+            "agent/model/effort combination that contributed. Let the human add "
+            "their own Signed-off-by if they want one.\n"
         )
         return 2
 
