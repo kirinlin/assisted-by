@@ -2,12 +2,12 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "assisted-by",
   "owner": {
-    "name": "bcmyguest",
-    "url": "https://github.com/bcmyguest"
+    "name": "kirinlin",
+    "url": "https://github.com/kirinlin"
   },
   "metadata": {
     "description": "Kernel-style AI commit attribution (Assisted-by) — skill + enforcing PreToolUse hook.",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "plugins": [
     {
