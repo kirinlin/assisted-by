@@ -7,6 +7,7 @@
 
 ### Changed
 
+- Reject generic Codex model labels in attribution trailers.
 - Use model identifier string terminology for Codex attribution guidance.
 
 - Update guard guidance to include known reasoning effort for Codex and Claude.

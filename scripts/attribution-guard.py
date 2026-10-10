@@ -52,6 +52,15 @@ def main() -> int:
             "for Claude, use `Assisted-by: Claude:<model-id>/<reasoning-effort>` "
             "when the reasoning effort is known"
         )
+
+    for match in re.finditer(r"Assisted-by:\s*Codex:([^/\s]+)", cmd, re.IGNORECASE):
+        model_identifier = match.group(1).strip("<> ").casefold()
+        if model_identifier in {"gpt-6", "model-id", "model"}:
+            problems.append(
+                "Codex attribution must use the model identifier string from the "
+                "session configuration; `GPT-6` is too generic"
+            )
+            break
     if re.search(r"Co-Authored-By:\s*(Claude|Codex)\b", cmd, re.IGNORECASE):
         problems.append(
             "remove the AI `Co-Authored-By:` line — kernel policy uses "

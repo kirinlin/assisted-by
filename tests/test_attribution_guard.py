@@ -34,9 +34,17 @@ class AttributionGuardTests(unittest.TestCase):
                     self.assertNotIn("Codex:<model-id>", denied.stderr)
                     self.assertIn("Omit /reasoning-effort if unavailable", denied.stderr)
                     self.assertEqual(denied.stdout, "")
+                    model_identifier = (
+                        "gpt-6.1-sol" if agent == "Codex" else "claude-opus-4-8"
+                    )
                     allowed = self.run_guard({
                         "tool_name": "Bash",
-                        "tool_input": {field: f'git commit -m "feat: update\n\nAssisted-by: {agent}:model/high"'},
+                        "tool_input": {
+                            field: (
+                                f'git commit -m "feat: update\n\nAssisted-by: '
+                                f'{agent}:{model_identifier}/high"'
+                            ),
+                        },
                     })
                     self.assertEqual(allowed.returncode, 0)
                     self.assertEqual(allowed.stderr, "")
@@ -58,6 +66,20 @@ class AttributionGuardTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 0)
                 self.assertEqual(result.stderr, "")
 
+    def test_generic_codex_model_identifiers_are_denied(self):
+        for model_identifier in (
+            "GPT-6", "model-id", "<model-id>", "<model identifier string>", "model"
+        ):
+            with self.subTest(model_identifier=model_identifier):
+                result = self.run_guard({"tool_input": {
+                    "command": (
+                        'git commit -m "fix: update\n\nAssisted-by: '
+                        f'Codex:{model_identifier}/high"'
+                    ),
+                }})
+                self.assertEqual(result.returncode, 2)
+                self.assertIn("model identifier string", result.stderr)
+
     def test_ai_trailers_are_denied(self):
         for trailer in (
             "Co-Authored-By: Codex <bot@example.com>",
@@ -76,7 +98,7 @@ class AttributionGuardTests(unittest.TestCase):
 
     def test_human_signoff_is_allowed(self):
         result = self.run_guard({"tool_input": {
-            "command": 'git commit -m "feat: update\n\nAssisted-by: Codex:model\nSigned-off-by: Developer <dev@example.com>"',
+            "command": 'git commit -m "feat: update\n\nAssisted-by: Codex:gpt-6.1-sol\nSigned-off-by: Developer <dev@example.com>"',
         }})
         self.assertEqual(result.returncode, 0)
 
