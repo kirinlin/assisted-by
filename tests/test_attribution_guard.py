@@ -29,8 +29,9 @@ class AttributionGuardTests(unittest.TestCase):
                         "tool_input": {field: 'git commit -m "feat: update"'},
                     })
                     self.assertEqual(denied.returncode, 2)
-                    self.assertIn("AGENT_NAME:<model-id>", denied.stderr)
-                    self.assertIn("AGENT_NAME:<model-id>/<reasoning-effort>", denied.stderr)
+                    self.assertIn("Codex:<model identifier string>/<reasoning-effort>", denied.stderr)
+                    self.assertIn("Claude:<model-id>/<reasoning-effort>", denied.stderr)
+                    self.assertNotIn("Codex:<model-id>", denied.stderr)
                     self.assertIn("Omit /reasoning-effort if unavailable", denied.stderr)
                     self.assertEqual(denied.stdout, "")
                     allowed = self.run_guard({

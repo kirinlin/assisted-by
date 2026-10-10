@@ -7,6 +7,8 @@
 
 ### Changed
 
+- Use model identifier string terminology for Codex attribution guidance.
+
 - Update guard guidance to include known reasoning effort for Codex and Claude.
 - Accept Codex shell payloads and reject AI sign-off and co-author trailers for Codex.
 

@@ -17,13 +17,15 @@ commit, in any repo on this machine.
   ```
 
   Format is `Assisted-by: AGENT_NAME:MODEL_VERSION [extra-analysis-tools]`. Fill
-  the agent name and model version with the agent and exact model ID actually used
+  the agent name and model version with the agent and exact model value actually used
   (e.g. `Claude:claude-opus-4-8`). Append
   specialized analysis tools only if actually used (e.g. `coccinelle`, `sparse`,
   `smatch`, `clang-tidy`).
 
 - For **Codex and Claude**, include the reasoning effort when known, using
-  `Assisted-by: AGENT_NAME:<model-id>/<reasoning-effort>`. For example:
+  `Assisted-by: Codex:<model identifier string>/<reasoning-effort>` or
+  `Assisted-by: Claude:<model-id>/<reasoning-effort>`. For Codex, use the model
+  identifier string from the session configuration. For example:
 
   ```
   Assisted-by: Codex:gpt-6-astra/medium
@@ -34,9 +36,9 @@ commit, in any repo on this machine.
   ```
 
   Use the model and effort from the session or contributing agent's configuration;
-  these examples are not defaults. Do not replace a known exact model ID with a
+  these examples are not defaults. Do not replace a known exact model value with a
   generic label such as `GPT-6`. If the effort is unavailable, omit the `/effort`
-  suffix; if the exact model ID is unavailable, use the most specific known model
+  suffix; if the exact model value is unavailable, use the most specific known model
   label without inventing details. When multiple agents contribute, credit each
   distinct agent/model/effort combination actually used with its own trailer.
 

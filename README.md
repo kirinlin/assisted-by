@@ -29,8 +29,10 @@ It ships two things:
 - 🚫 Don't list basic tools (git, gcc, editors) — only the AI agent and any specialized
   analysis tools (`coccinelle`, `sparse`, `smatch`, …).
 
-For Codex and Claude, record the exact model ID and reasoning effort from the session
-when known as `Assisted-by: AGENT_NAME:<model-id>/<reasoning-effort>`, for example:
+For Codex and Claude, record the exact model value and reasoning effort from the session
+when known. For Codex, use the model identifier string as
+`Assisted-by: Codex:<model identifier string>/<reasoning-effort>`. For Claude, use
+`Assisted-by: Claude:<model-id>/<reasoning-effort>`. For example:
 
 ```text
 Assisted-by: Codex:gpt-6-astra/medium
